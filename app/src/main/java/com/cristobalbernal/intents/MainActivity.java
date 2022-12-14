@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,19 +12,29 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     Button abrir;
     Button llamar;
     Button abrirPaginaWeb;
+    Button mapa;
+    Button email;
+    Button camara;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String[] to = {"joanmocho@gmail.com"};
         abrir = findViewById(R.id.abrirAplicacion);
         llamar = findViewById(R.id.llamar);
         abrirPaginaWeb = findViewById(R.id.abrirPaginaWeb);
+        mapa = findViewById(R.id.maps);
+        email = findViewById(R.id.email);
+        camara = findViewById(R.id.camara);
+
+
         abrir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,12 +49,51 @@ public class MainActivity extends AppCompatActivity {
         });
         abrirPaginaWeb.setOnClickListener(new View.OnClickListener() {
             @Override
+            //Se le tiene que poner el https o sino derror!!!!!
             public void onClick(View view) {
-                abrirPaginaWeb("www.google.es");
+                abrirPaginaWeb("https://www.google.es/");
+            }
+        });
+        mapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abriMapa("IES LA MAR");
+            }
+        });
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enviarEmail(to,"AsuntoPrueba","Hola Joan!!!");
+            }
+        });
+        camara.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirCamara();
             }
         });
 
     }
+
+    private void abrirCamara() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        startActivity(intent);
+    }
+
+    @SuppressLint("IntentReset")
+    private void enviarEmail(String[] para,String asunto, String contexto) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        //Le tienes que pasar un array porque o sino no pilla...
+        //Preguntar german!!!
+        emailIntent.putExtra(Intent.EXTRA_EMAIL,para);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT,asunto);
+        emailIntent.putExtra(Intent.EXTRA_TEXT,contexto);
+        startActivity(Intent.createChooser(emailIntent,"Send Email!!!!"));
+    }
+
+
     private void abrirAplicacion(String pck, String clase) {
         Intent abrirAplicacion = new Intent()
                 .setAction(Intent.ACTION_MAIN);
@@ -60,8 +110,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void abrirPaginaWeb(String url){
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-        startActivity(intent);
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(webIntent);
+    }
+    private void abriMapa(String query) {
+        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + query));
+        if (mapsIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapsIntent);
+        } else {
+            Toast.makeText(this, "Google Maps no disponible", Toast.LENGTH_LONG).show();
+        }
     }
 }
