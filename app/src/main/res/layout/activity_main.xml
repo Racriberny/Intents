@@ -41,20 +41,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Camara"
-        app:layout_constraintBottom_toTopOf="@+id/fddfd"
+        app:layout_constraintBottom_toTopOf="@+id/abrirPaginaWeb"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/maps" />
 
     <Button
-        android:id="@+id/fddfd"
+        android:id="@+id/abrirPaginaWeb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
-        android:text="Button"
+        android:text="AbrirPaginaWeb"
         app:layout_constraintBottom_toTopOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,5 +67,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fddfd" />
+        app:layout_constraintTop_toBottomOf="@+id/abrirPaginaWeb" />
 </androidx.constraintlayout.widget.ConstraintLayout>
