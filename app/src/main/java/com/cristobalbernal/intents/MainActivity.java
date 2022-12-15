@@ -21,12 +21,13 @@ public class MainActivity extends AppCompatActivity {
     Button mapa;
     Button email;
     Button camara;
+    private final int DEFAULT_ZOOM = 17;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String[] to = {"joanmocho@gmail.com"};
+        String[] to = {"joanmonvi@gmail.com "};
         abrir = findViewById(R.id.abrirAplicacion);
         llamar = findViewById(R.id.llamar);
         abrirPaginaWeb = findViewById(R.id.abrirPaginaWeb);
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         mapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                abriMapa("IES LA MAR");
+                abrirMapa(38.9911726,-1.8647103,DEFAULT_ZOOM,"");
             }
         });
         email.setOnClickListener(new View.OnClickListener() {
@@ -85,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setData(Uri.parse("mailto:"));
         emailIntent.setType("text/plain");
-        //Le tienes que pasar un array porque o sino no pilla...
-        //Preguntar german!!!
         emailIntent.putExtra(Intent.EXTRA_EMAIL,para);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT,asunto);
         emailIntent.putExtra(Intent.EXTRA_TEXT,contexto);
@@ -113,12 +112,25 @@ public class MainActivity extends AppCompatActivity {
         Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(webIntent);
     }
-    private void abriMapa(String query) {
-        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + query));
+
+    private void abrirMapa(double lat, double lon){
+        abrirMapa(lat,lon,DEFAULT_ZOOM,"");
+    }
+
+    private void abrirMapa(double lat, double lon, double zoom){
+        abrirMapa(lat,lon,zoom);
+    }
+    private void abrirMapa(double lat, double lon, double zoom, String querry){
+        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:"+lat +","+lon+ "?z="+zoom+ "&q=" +querry));
         if (mapsIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(mapsIntent);
         } else {
             Toast.makeText(this, "Google Maps no disponible", Toast.LENGTH_LONG).show();
         }
+    }
+
+
+    private void abrirMapa(String query) {
+        abrirMapa(0,0,DEFAULT_ZOOM,query);
     }
 }
